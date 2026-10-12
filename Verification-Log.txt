@@ -1,0 +1,131 @@
+COMMAND: -m unittest discover -s tests -v
+EXIT: 0
+test_all_verifiers (test_projects.PasswordTests.test_all_verifiers) ... ok
+test_attempt_limit (test_projects.PasswordTests.test_attempt_limit) ... ok
+test_brute_force (test_projects.PasswordTests.test_brute_force) ... ok
+test_dictionary_success_and_failure (test_projects.PasswordTests.test_dictionary_success_and_failure) ... ok
+test_invalid_search_space (test_projects.PasswordTests.test_invalid_search_space) ... ok
+test_sha256_known_vector (test_projects.PasswordTests.test_sha256_known_vector) ... ok
+test_unicode (test_projects.PasswordTests.test_unicode) ... ok
+test_unique_salts (test_projects.PasswordTests.test_unique_salts) ... ok
+test_authentication_controls (test_projects.VAPTTests.test_authentication_controls) ... ok
+test_idor_and_remediation (test_projects.VAPTTests.test_idor_and_remediation) ... ok
+test_invalid_objects (test_projects.VAPTTests.test_invalid_objects) ... ok
+test_sql_injection_and_remediation (test_projects.VAPTTests.test_sql_injection_and_remediation) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 2.464s
+
+OK
+
+
+COMMAND: -m vapt.assessment
+EXIT: 0
+vulnerable
+  service_enumeration: HTTP 200
+  unauthenticated_access: HTTP 401
+  invalid_login: HTTP 401
+  sql_injection_login_bypass: HTTP 200
+  valid_login: HTTP 200
+  own_note: HTTP 200
+  idor_other_users_note: HTTP 200
+  missing_note: HTTP 404
+  malformed_note_id: HTTP 400
+fixed
+  service_enumeration: HTTP 200
+  unauthenticated_access: HTTP 401
+  invalid_login: HTTP 401
+  sql_injection_login_bypass: HTTP 401
+  valid_login: HTTP 200
+  own_note: HTTP 200
+  idor_other_users_note: HTTP 403
+  missing_note: HTTP 404
+  malformed_note_id: HTTP 400
+Evidence saved to vapt\results.json
+
+
+COMMAND: -m password_lab.passwords
+EXIT: 0
+{
+  "generated_utc": "2026-10-12T12:55:11.250384+00:00",
+  "dataset": "Synthetic credentials generated locally; no leaked or external credentials",
+  "records": {
+    "sha256": {
+      "algorithm": "sha256",
+      "salt": "",
+      "iterations": 1,
+      "digest": "b01d03884ea593ca27640d8f90ab23771fb59a0fb6e7a9b953a512682da30f01"
+    },
+    "salted_sha256": {
+      "algorithm": "salted_sha256",
+      "salt": "e9d6cb0eed16e8592050c96523d3fb11",
+      "iterations": 1,
+      "digest": "3200c4c4cd2998775973fdbdd2eeae3b25276c1a3f1844da5c8da0e1062adeb1"
+    },
+    "pbkdf2_sha256": {
+      "algorithm": "pbkdf2_sha256",
+      "salt": "c7c34ad3047afc30890b08dfd176c0ed",
+      "iterations": 600000,
+      "digest": "e003634e0b0f8404a5d2c850c28d7695cd55e264a5ca806000c0c76c307e3cf4"
+    }
+  },
+  "dictionary_attacks": {
+    "sha256": {
+      "recovered": "lab-only-42",
+      "attempts": 4,
+      "elapsed_seconds": 2.3900065571069717e-05
+    },
+    "salted_sha256": {
+      "recovered": "lab-only-42",
+      "attempts": 4,
+      "elapsed_seconds": 1.079996582120657e-05
+    },
+    "pbkdf2_sha256": {
+      "recovered": "lab-only-42",
+      "attempts": 4,
+      "elapsed_seconds": 1.0080116000026464
+    }
+  },
+  "benchmark": {
+    "sha256": {
+      "median_verification_seconds": 2.00001522898674e-06,
+      "samples": 5
+    },
+    "salted_sha256": {
+      "median_verification_seconds": 1.999898813664913e-06,
+      "samples": 5
+    },
+    "pbkdf2_sha256": {
+      "median_verification_seconds": 0.24139770003966987,
+      "samples": 5
+    }
+  },
+  "brute_force": {
+    "recovered": "042",
+    "attempts": 43,
+    "elapsed_seconds": 0.00017110002227127552
+  },
+  "absent_candidate": {
+    "recovered": null,
+    "attempts": 5,
+    "elapsed_seconds": 1.0399962775409222e-05
+  },
+  "salt_demo": {
+    "same_password": true,
+    "different_salts": true,
+    "different_digests": true
+  },
+  "caveat": "CPU-only single-process measurements; not GPU cracking speeds or population-level conclusions."
+}
+
+
+COMMAND: -m vapt.lab --help
+EXIT: 0
+usage: lab.py [-h] [--mode {fixed,vulnerable}] [--port PORT]
+
+Deliberately vulnerable, loopback-only training API. Never deploy publicly.
+
+options:
+  -h, --help            show this help message and exit
+  --mode {fixed,vulnerable}
+  --port PORT
